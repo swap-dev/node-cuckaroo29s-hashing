@@ -1,0 +1,50 @@
+{
+  "_from": "git+https://github.com/swap-dev/node-cuckaroo29s-hashing.git",
+  "_id": "cuckaroo29s-hashing@1.0.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cuckaroo29s-hashing",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "cuckaroo29s-hashing@git+https://github.com/swap-dev/node-cuckaroo29s-hashing.git",
+    "name": "cuckaroo29s-hashing",
+    "escapedName": "cuckaroo29s-hashing",
+    "rawSpec": "git+https://github.com/swap-dev/node-cuckaroo29s-hashing.git",
+    "saveSpec": "git+https://github.com/swap-dev/node-cuckaroo29s-hashing.git",
+    "fetchSpec": "https://github.com/swap-dev/node-cuckaroo29s-hashing.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git+https://github.com/swap-dev/node-cuckaroo29s-hashing.git",
+  "_spec": "cuckaroo29s-hashing@git+https://github.com/swap-dev/node-cuckaroo29s-hashing.git",
+  "_where": "/opt/proxy_swap",
+  "author": {
+    "name": "sebseb7"
+  },
+  "bugs": {
+    "url": "https://github.com/swap-dev/node-cuckaroo29s-hashing/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "bignum": "*",
+    "bindings": "*",
+    "nan": "^2.8.0"
+  },
+  "deprecated": false,
+  "gypfile": true,
+  "homepage": "https://github.com/swap-dev/node-cuckaroo29s-hashing#readme",
+  "license": "0bsd",
+  "main": "cuckaroo29s-hashing",
+  "name": "cuckaroo29s-hashing",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swap-dev/node-cuckaroo29s-hashing.git"
+  },
+  "scripts": {
+    "install": "node-gyp rebuild"
+  },
+  "version": "1.0.0"
+}
