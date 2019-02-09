@@ -130,26 +130,34 @@ NAN_METHOD(cuckaroo29s) {
 
 	uint32_t edges[PROOFSIZE];
 	for (uint32_t n = 0; n < PROOFSIZE; n++)
-		edges[n]=ring->Get(n)->Int32Value(Nan::GetCurrentContext()).ToChecked();;
-	
+		edges[n]=ring->Get(n)->Uint32Value(Nan::GetCurrentContext()).ToChecked();;
+
 	int retval = verify(edges,&keys);
 
-//	printf("result: %s\n",errstr[retval]);
+	info.GetReturnValue().Set(Nan::New<Number>(retval));
+}
+
+NAN_METHOD(cycle_hash) {
+	if (info.Length() != 1) return THROW_ERROR_EXCEPTION("You must provide 1 argument:ring");
 	
+	Local<Array> ring = Local<Array>::Cast(info[0]);
+
+	uint32_t edges[PROOFSIZE];
+	for (uint32_t n = 0; n < PROOFSIZE; n++)
+		edges[n]=ring->Get(n)->Uint32Value(Nan::GetCurrentContext()).ToChecked();;
+
 	unsigned char cyclehash[32];
-	blake2b((void *)cyclehash, sizeof(cyclehash), (const void *)edges, sizeof(edges), 0, 0);
+	blake2b((void *)cyclehash, sizeof(cyclehash), (uint8_t *)edges, 128, 0, 0);
 	
-	if (retval == 0)
-	{
-		v8::Local<v8::Value> returnValue = Nan::CopyBuffer((char*)cyclehash, 32).ToLocalChecked();
-		info.GetReturnValue().Set(returnValue);
-	}
+	v8::Local<v8::Value> returnValue = Nan::CopyBuffer((char*)cyclehash, 32).ToLocalChecked();
+	info.GetReturnValue().Set(returnValue);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 NAN_MODULE_INIT(init) {
 	Nan::Set(target, Nan::New("cuckaroo29s").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cuckaroo29s)).ToLocalChecked());
+	Nan::Set(target, Nan::New("cycle_hash").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cycle_hash)).ToLocalChecked());
 }
 
 NODE_MODULE(cuckaroo29s, init)
