@@ -131,7 +131,7 @@ NAN_METHOD(cuckaroo29s) {
 	uint32_t edges[PROOFSIZE];
 	for (uint32_t n = 0; n < PROOFSIZE; n++)
 		edges[n]=ring->Get(n)->Uint32Value(Nan::GetCurrentContext()).ToChecked();;
-
+	
 	int retval = verify(edges,&keys);
 
 	info.GetReturnValue().Set(Nan::New<Number>(retval));
@@ -142,14 +142,35 @@ NAN_METHOD(cycle_hash) {
 	
 	Local<Array> ring = Local<Array>::Cast(info[0]);
 
-	uint32_t edges[PROOFSIZE];
-	for (uint32_t n = 0; n < PROOFSIZE; n++)
-		edges[n]=ring->Get(n)->Uint32Value(Nan::GetCurrentContext()).ToChecked();;
+	uint8_t hashdata[116]; // PROOFSIZE*EDGEBITS/8
+	memset(hashdata, 0, 116);
+
+	int bytepos = 0;
+	int bitpos = 0;
+	for(int i = 0; i < PROOFSIZE; i++){
+
+		uint32_t node = ring->Get(i)->Uint32Value(Nan::GetCurrentContext()).ToChecked();
+
+		for(int j = 0; j < EDGEBITS; j++) {
+			
+			if((node >> j) & 1U)
+				hashdata[bytepos] |= 1UL << bitpos;
+
+			bitpos++;
+			if(bitpos==8) {
+				bitpos=0;bytepos++;
+			}
+		}
+	}
 
 	unsigned char cyclehash[32];
-	blake2b((void *)cyclehash, sizeof(cyclehash), (uint8_t *)edges, 128, 0, 0);
+	blake2b((void *)cyclehash, sizeof(cyclehash), (uint8_t *)hashdata, sizeof(hashdata), 0, 0);
 	
-	v8::Local<v8::Value> returnValue = Nan::CopyBuffer((char*)cyclehash, 32).ToLocalChecked();
+	unsigned char rev_cyclehash[32];
+	for(int i = 0; i < 32; i++)
+		rev_cyclehash[i] = cyclehash[31-i];
+	
+	v8::Local<v8::Value> returnValue = Nan::CopyBuffer((char*)rev_cyclehash, 32).ToLocalChecked();
 	info.GetReturnValue().Set(returnValue);
 }
 
