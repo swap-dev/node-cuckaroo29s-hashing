@@ -149,7 +149,7 @@ NAN_METHOD(cycle_hash) {
 	int bitpos = 0;
 	for(int i = 0; i < PROOFSIZE; i++){
 
-		uint32_t node = ring->Get(i)->Uint32Value(Nan::GetCurrentContext()). FromJust();
+		uint32_t node = ring->Get(i)->Uint32Value(Nan::GetCurrentContext()).FromJust();
 
 		for(int j = 0; j < EDGEBITS; j++) {
 			
